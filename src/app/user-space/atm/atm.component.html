@@ -1,0 +1,46 @@
+<h1>ATM</h1>
+<form [formGroup]="atmForm" (submit)="onSubmit()">
+  <div class="row mb-3">
+    <label for="selector" class="col-sm-2 col-form-label">Account</label>
+  <select id="selector" formControlName="accountId" class="form-select">
+    <option value="" disabled>Choose your account</option>
+    <option *ngFor="let account of accounts;" [ngValue]="account._id">{{account.accountNumber}} (Balance: {{account.balance | number : '1.2-2'}} {{account.currency?.toUpperCase()}})</option>
+  </select>
+  </div>
+  <div class="row mb-3">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">Amount</label>
+    <div class="col-sm-10">
+      <input currencyMask [options]="{ prefix: '', suffix: selectedCurrency(), align: 'left', allowNegative: false }" formControlName="amount" class="form-control {{atmForm.get('amount')?.invalid ? 'is-invalid' : 'is-valid'}}" id="inputEmail3" placeholder="4.75" value="0.00">
+      <small class="invalid-feedback" *ngIf="atmForm.get('amount')?.invalid && (atmForm.get('amount')?.dirty || atmForm.get('amount')?.touched)">
+        <small *ngIf="atmForm.get('amount')?.errors?.['required']">
+          Enter valid amount with two decimal places
+        </small>
+      </small>
+    </div>
+  </div>
+  <fieldset class="row mb-3">
+    <legend class="col-form-label col-sm-2 pt-0">Options</legend>
+    <div class="col-sm-10">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="gridRadios1" value="payment" [ngModel]="defaultPick" (click)="isPayout(false)" formControlName="action">
+        <label class="form-check-label" for="gridRadios1">
+          Deposit
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="gridRadios2" value="payout" [ngModel]="defaultPick" (click)="isPayout(true)" formControlName="action">
+        <label class="form-check-label" for="gridRadios2">
+          Payout
+        </label>
+      </div>
+    </div>
+  </fieldset>
+  <ng-container *ngIf="isPayoutActive">
+  <label for="pcr" class="col-form-label">Payout currency</label>
+  <select formControlName="currency" id="pcr" class="form-select">
+    <option [disabled]="true">Choose your currency</option>
+    <option *ngFor="let cur of currenciesNames; let i = index" [ngValue]="currencies[i]">{{currenciesNames[i]}} ({{currencies[i].toUpperCase()}})</option>
+  </select>
+  </ng-container>
+  <button type="submit" [disabled]="atmForm.invalid" class="btn btn-primary mt-1">Make a {{isPayoutActive ? 'payout' : 'deposit'}}</button>
+</form>

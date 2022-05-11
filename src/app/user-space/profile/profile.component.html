@@ -1,0 +1,29 @@
+<h1>PROFILE</h1>
+<form [formGroup]="profileForm" (submit)="submit()">
+<table class="table table-striped">
+  <thead>
+  <th scope="col">NAME</th>
+  <th scope="col">SURNAME</th>
+  <th scope="col">EMAIL</th>
+  </thead>
+  <tbody>
+  <ng-container *ngIf="editing; else notEdit">
+      <td><input type="text" formControlName="name" class="form-control {{profileForm.get('name')?.invalid ? 'is-invalid' : 'is-valid'}}"></td>
+      <td><input type="text" formControlName="surname" class="form-control {{profileForm.get('surname')?.invalid ? 'is-invalid' : 'is-valid'}}"></td>
+      <td><input type="email" formControlName="email" class="form-control {{profileForm.get('email')?.invalid ? 'is-invalid' : 'is-valid'}}"></td>
+      <button type="submit" [disabled]="profileForm.invalid" class="btn btn-secondary">Save</button>
+  </ng-container>
+  <ng-template #notEdit>
+    <tr>
+      <td>{{user?.name}}</td>
+      <td>{{user?.surname}}</td>
+      <td>{{user?.email}}</td>
+    </tr>
+  </ng-template>
+
+  </tbody>
+</table>
+</form>
+<button type="button" class="btn" [ngClass]="editing ? 'btn-danger' : 'btn-warning'"
+        (click)="editing = !editing; ifEditing()">{{ editing ? 'Cancel' : 'Edit' }}
+</button>

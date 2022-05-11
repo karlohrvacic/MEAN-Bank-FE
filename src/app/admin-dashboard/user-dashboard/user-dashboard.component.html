@@ -1,0 +1,34 @@
+<div *ngIf="!users" class="spinner-border text-dark" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
+<div *ngIf="users">
+  <h3>Registered users ({{users.length}})</h3>
+  <ng-container *ngIf="users.length; else noAccounts">
+    <table class="table table-striped">
+      <thead>
+      <th scope="col">NAME</th>
+      <th scope="col">SURNAME</th>
+      <th scope="col">EMAIL</th>
+      <th scope="col">OIB</th>
+      <th scope="col">NUMBER OF ACCOUNTS</th>
+      <th scope="col">ACTION</th>
+      </thead>
+      <tbody>
+      <tr href *ngFor="let user of users; let i = index;">
+        <td>{{user.name}}</td>
+        <td>{{user.surname}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.oib}}</td>
+        <td>{{getUserAccounts(user._id).length}}</td>
+          <td>
+            <button *ngIf="getUserAccounts(user._id).length == 0" class="btn btn-danger" (click)="deleteUser(user._id)" [disabled]="getUserAccounts(user._id).length != 0">Delete</button>
+            <button *ngIf="getUserAccounts(user._id).length > 0" class="btn btn-info" [routerLink]="['accounts/' + user._id]">Accounts</button>
+          </td>
+      </tr>
+      </tbody>
+    </table>
+  </ng-container>
+  <ng-template #noAccounts>
+    <h2>No registered users!</h2>
+  </ng-template>
+</div>

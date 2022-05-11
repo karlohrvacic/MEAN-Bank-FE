@@ -1,0 +1,30 @@
+<h3>Accounts for {{userId}}</h3>
+<ng-container *ngIf="getAccounts().length > 0">
+  <h5>Accounts</h5>
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">ACCOUNT NUMBER</th>
+      <th scope="col">BALANCE</th>
+      <th scope="col">CURRENCY</th>
+      <th scope="col">ACTION</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let account of getAccounts()">
+      <th scope="row">{{account.accountNumber}}</th>
+      <th scope="row">{{account.balance | number : '1.2-2'}}</th>
+      <th scope="row">{{account.currency?.toUpperCase()}}</th>
+      <th scope="row">
+        <button class="btn btn-info me-1" [routerLink]="['transactions/' + account._id]">Info</button>
+        <button class="btn btn-danger" (click)="deleteAccount(account._id)">Delete</button>
+      </th>
+    </tr>
+    </tbody>
+  </table>
+</ng-container>
+<ng-container *ngIf="getAccounts().length == 0">
+  <h4>No transactions</h4>
+</ng-container>
+<button class="btn btn-info" (click)="back()">Back</button>
+

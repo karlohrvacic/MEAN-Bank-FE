@@ -1,0 +1,17 @@
+<form class="account-from" (submit)="onSubmit()" [formGroup]="accountForm">
+  <table class="table table-striped table-hover">
+    <thead>
+    <th scope="col">CURRENCY</th>
+    <th scope="col">ACTION</th>
+    </thead>
+        <td>
+          <select formControlName="currency" class="form-select">
+            <option value="" disabled>Choose your currency</option>
+            <option *ngFor="let cur of currenciesNames; let i = index" [ngValue]="currencies[i]">{{currenciesNames[i]}} ({{currencies[i].toUpperCase()}})</option>
+          </select>
+        </td>
+        <td>
+            <button type="submit" [disabled]="accountForm.invalid" class="btn btn-info">Submit</button>
+        </td>
+  </table>
+</form>

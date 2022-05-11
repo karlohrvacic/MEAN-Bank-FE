@@ -1,0 +1,27 @@
+<h1>MONEY TRANSFER</h1>
+<form [formGroup]="transferForm" (submit)="onSubmit()">
+  <div class="row mb-3">
+    <label for="selector" class="col-form-label">From</label>
+    <select id="selector" formControlName="senderAccountId" class="form-select">
+      <option value="" disabled>Choose your account</option>
+      <option *ngFor="let account of myAccounts;" [ngValue]="account._id">{{account.accountNumber}} (Balance: {{account.balance | number : '1.2-2'}} {{account.currency?.toUpperCase()}})</option>
+    </select>
+    <label for="selectors" class="col-form-label">To</label>
+    <select id="selectors" formControlName="receiverAccountId" class="form-select">
+      <option value="" disabled>Choose other account</option>
+      <option *ngFor="let account of allAccounts();" [ngValue]="account._id">{{account.accountNumber}} ({{account | moneyOrCurrency}})</option>
+    </select>
+  </div>
+  <div class="row mb-3">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">Amount</label>
+    <div class="col-sm-10">
+      <input  currencyMask [options]="{ prefix: '', suffix: selectedCurrency(), align: 'left', allowNegative: false }" formControlName="amount" class="form-control {{transferForm.get('amount')?.invalid ? 'is-invalid' : 'is-valid'}}" id="inputEmail3" placeholder="4.75">
+      <small class="invalid-feedback" *ngIf="transferForm.get('amount')?.invalid && (transferForm.get('amount')?.dirty || transferForm.get('amount')?.touched)">
+        <small *ngIf="transferForm.get('amount')?.errors?.['required']">
+          Enter valid amount with two decimal places
+        </small>
+      </small>
+    </div>
+  </div>
+  <button type="submit" [disabled]="transferForm.invalid" class="btn btn-primary mt-1">Send money</button>
+</form>

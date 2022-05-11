@@ -1,0 +1,44 @@
+<h3>Transactions for ({{account?.accountNumber}}, {{account?.currency?.toUpperCase()}})</h3>
+<ng-container *ngIf="getPayments().length > 0">
+  <h5>Transactions</h5>
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">TIME</th>
+      <th scope="col">CURRENCY</th>
+      <th scope="col">AMOUNT</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let transaction of getPayments()" [ngClass]="getClass(transaction.amount)">
+      <th scope="row">{{transaction.timestamp | date: 'yyyy-M-d HH:mm:ss'}}</th>
+      <td>{{transaction.currency?.toUpperCase()}}</td>
+      <td>{{transaction.amount | number : '1.2-2'}} {{transaction.currency?.toUpperCase()}}</td>
+    </tr>
+    </tbody>
+  </table>
+</ng-container>
+<ng-container *ngIf="getTransactions().length > 0">
+  <h5>Money sent and received</h5>
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">TIME</th>
+      <th scope="col">CURRENCY</th>
+      <th scope="col">AMOUNT</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let transaction of getTransactions()" [ngClass]="transaction.receiverAccountId == accountId ? 'table-success' : 'table-danger'">
+      <th scope="row">{{transaction.timestamp | date: 'yyyy-M-d HH:mm:ss'}}</th>
+      <td>{{account?.currency?.toUpperCase()}}</td>
+      <td>{{transaction.amount | number : '1.2-2'}} {{account?.currency?.toUpperCase()}}</td>
+    </tr>
+    </tbody>
+  </table>
+</ng-container>
+<ng-container *ngIf="getTransactions().length + getPayments().length == 0">
+  <h4>No transactions</h4>
+</ng-container>
+<button class="btn btn-info" (click)="back()">Back</button>
+

@@ -1,0 +1,38 @@
+<div *ngIf="!accounts" class="spinner-border text-dark" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
+<div *ngIf="accounts">
+  <h1>Your accounts ({{accounts.length}})</h1>
+  <ng-container *ngIf="accounts.length; else noAccounts">
+    <table class="table table-striped">
+      <thead>
+      <th scope="col">CURRENCY</th>
+      <th scope="col">ACCOUNT NUMBER</th>
+      <th scope="col">BALANCE</th>
+      <th scope="col">Action</th>
+      </thead>
+      <tbody>
+      <tr href *ngFor="let account of accounts; let i = index;" >
+        <td>{{account.currency?.toUpperCase()}}</td>
+        <td>{{account.accountNumber}}</td>
+        <td>{{account.balance | number : '1.2-2'}} {{account.currency?.toUpperCase()}}</td>
+        <td>
+          <button class="btn btn-info me-1" [routerLink]="['transactions/' + account._id]">Info</button>
+          <button *ngIf="account.balance == 0;" class="btn btn-danger" (click)="deleteAccount(account._id)">Delete</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </ng-container>
+  <ng-template #noAccounts>
+    <h2>You have no accounts!</h2>
+  </ng-template>
+
+  <app-add-account [userId]="user._id" (closeEvent)="onClose()" *ngIf="addingAccount"></app-add-account>
+
+  <button type="button" class="btn" [ngClass]="addingAccount ? 'btn-danger' : 'btn-warning'"
+          (click)="addingAccount = !addingAccount">
+    {{ addingAccount ? 'Cancel' : 'Add an account' }}
+  </button>
+
+</div>
